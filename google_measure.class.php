@@ -16,25 +16,26 @@ class google_measure {
 		if($client_id) $this->setClientId($client_id);
 	}
 
-	public function createEvent() {
+	public function createEvent($category, $action, $label = '', $value = '') {
 		$this->data = array(
 			'payload_data' => 1,
 			'v'		=> self::GA_VERSION,
 			'tid'	=> self::ANALYTICS_PROPERTY,
 			'cid'	=> $this->ua_client_id,
 			't'		=> $this->type,
-			'ec'	=> $this->event['category'],
-			'ea'	=> $this->event['action'],
-			'el'	=> isset($this->event['label']) ? $this->event['label'] : '',
-			'ev'	=> isset($this->event['value']) ? $this->event['value'] : ''
+			'ec'	=> $category,
+			'ea'	=> $action,
+			'el'	=> $label,
+			'ev'	=> $value
 		);
 		$this->data = array_merge($this->data, $this->addDimensions());
+		$this->data = array_merge($this->data, $this->addMetrics());
 	//	echo "<pre>"; var_dump($this->data); die;
 		$this->send();
 		return true;
 	}
 
-	public function send() {
+	protected function send() {
 		$options = array(
 			'http' => array(
 				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -56,26 +57,6 @@ class google_measure {
 		return $this;
 	}
 
-	public function setEventCategory($category) {
-		$this->event['category'] = $category;
-		return $this;
-	}
-
-	public function setEventAction($action) {
-		$this->event['action'] = $action;
-		return $this;
-	}
-
-	public function setEventLabel($label) {
-		$this->event['label'] = $label;
-		return $this;
-	}
-
-	public function setEventValue($value) {
-		$this->event['value'] = (int)$value;
-		return $this;
-	}
-
 	public function setCustomDimension($index, $value) {
 		$this->dimension[$index] = $value;
 		return $this;
@@ -89,6 +70,13 @@ class google_measure {
 	protected function addDimensions() {
 		foreach($this->dimension as $index => $value) {
 			$data['cd' . $index] = $value;
+		}
+		return $data;
+	}
+
+	protected function addMetrics() {
+		foreach($this->metric as $index => $value) {
+			$data['cm' . $index] = $value;
 		}
 		return $data;
 	}
