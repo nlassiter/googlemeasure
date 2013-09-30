@@ -11,8 +11,7 @@ class google_measure {
 	const GA_VERSION = 1;
 	const GA_POST_URL = 'https://ssl.google-analytics.com/collect';
 
-	public function __construct($type, $client_id = null) {
-		if($type) $this->setTrackingType($type);
+	public function __construct($client_id = null) {
 		if($client_id) $this->setClientId($client_id);
 	}
 
@@ -22,7 +21,7 @@ class google_measure {
 			'v'		=> self::GA_VERSION,
 			'tid'	=> self::ANALYTICS_PROPERTY,
 			'cid'	=> $this->ua_client_id,
-			't'		=> $this->type,
+			't'		=> 'event',
 			'ec'	=> $category,
 			'ea'	=> $action,
 			'el'	=> $label,
