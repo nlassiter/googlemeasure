@@ -17,3 +17,6 @@ ga(function(tracker) {
   var clientId = tracker.get('clientId');
 });
 ```
+
+References
+https://developers.google.com/analytics/devguides/collection/protocol/v1/
