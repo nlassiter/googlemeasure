@@ -14,7 +14,7 @@ $ga->setEventCategory('listing')
 ```
 			
 
-$_COOKIE['ua_client_id'] was already set from:
+$_COOKIE['ua_client_id'] was already set from a login post that included the google client id:
 ```
 ga(function(tracker) {
   var clientId = tracker.get('clientId');
